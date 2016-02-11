@@ -1,0 +1,17 @@
+# AD trust
+-p tcp --dport 53 -j ACCEPT
+-p tcp --dport 88 -j ACCEPT
+-p tcp --dport 135 -j ACCEPT
+-p tcp --dport 389 -j ACCEPT
+-p tcp --dport 445 -j ACCEPT
+-p tcp --dport 636 -j ACCEPT
+-p tcp --dport 3268 -j ACCEPT
+-p tcp --dport 3269 -j ACCEPT
+
+-p tcp -m multiport --dports 1024:65535 -j ACCEPT
+
+-p udp --dport 53 -j ACCEPT
+-p udp --dport 88 -j ACCEPT
+-p udp --dport 389 -j ACCEPT
+
+-p udp -m multiport --dports 1024:65535 -j ACCEPT

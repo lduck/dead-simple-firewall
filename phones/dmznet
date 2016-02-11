@@ -1,0 +1,4 @@
+# phones to PBX
+-p udp --dport 5060 -d 192.168.0.50 -j ACCEPT
+-p udp --dport 10000:30000 -d 192.168.0.50 -j ACCEPT
+

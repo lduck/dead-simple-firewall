@@ -1,0 +1,6 @@
+# all admins can ssh to any salespersons PCs
+-p tcp --dport ssh -j ACCEPT
+
+# this admin could remotedesktop to the particular sales guy
+-s 10.7.0.1 -d 10.8.0.20 -p tcp --dport 3389 -j ACCEPT
+

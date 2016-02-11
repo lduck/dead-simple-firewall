@@ -1,0 +1,5 @@
+# this rule is used from _extras/fw-dmzlandefault rule. Never to be
+# used directly.
+-d 192.168.0.40 -j ACCEPT
+-d 192.168.0.50 -j ACCEPT
+-d 192.168.0.60 -j ACCEPT

@@ -1,0 +1,10 @@
+# sales people can access various servers in our DMZ
+-d 192.168.0.20 -p udp --dport 53 -j ACCEPT
+-d 192.168.0.21 -p udp --dport 53 -j ACCEPT
+
+
+-d 192.168.0.30 -p tcp --dport 3389 -j ACCEPT
+
+-d 192.168.0.30 -p tcp --dport 25 -j ACCEPT
+
+-j dmzlandefault

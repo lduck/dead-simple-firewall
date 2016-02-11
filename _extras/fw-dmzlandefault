@@ -1,0 +1,49 @@
+##########
+# default rules for LAN machines
+##########
+
+# intranet (web)
+-d 192.168.0.99 -p tcp --dport 80 -j ACCEPT
+
+# network folders
+-d 192.168.0.30 -p tcp --dport 137:139 -j ACCEPT
+-d 192.168.0.30 -p tcp --dport 445 -j ACCEPT
+-d 192.168.0.31 -p tcp --dport 137:139 -j ACCEPT
+-d 192.168.0.31 -p tcp --dport 445 -j ACCEPT
+
+# ping to any server
+-p icmp --icmp-type 8 -j ACCEPT
+
+
+# Proxy
+-d 192.168.0.25 -p tcp --dport 8080 -j ACCEPT              # Proxy
+-d 192.168.0.25 -p tcp --dport 80 -j ACCEPT              # WPAD
+
+# DHCP
+-p udp --dport 67 -d 192.168.0.56 -j ACCEPT		# DHCP1
+-p udp --dport 67 -d 192.168.0.57 -j ACCEPT               # DHCP2
+
+# Rules for AD 2012 R2
+-p icmp --icmp-type 8 -j todc				# ping
+-p tcp --dport 53 -j todc				# DNS
+-p udp --dport 53 -j todc				# DNS
+-p udp --dport 123 -j todc				# Windows Time
+# -p tcp --dport 389 -j todc				# LDAP
+-p tcp --dport 636 -j todc				# LDAP SSL
+# -p tcp --dport 3268 -j todc				# LDAP GS
+-p tcp --dport 3269 -j todc				# LDAP GS SSL
+-p tcp --dport 9389 -j todc				# SOAP, AD DS Web Services
+-p tcp --dport 88 -j todc				# Kerberos
+-p udp --dport 138 -j todc				# DFSN, NetLogon, NetBIOS Datagram Service
+-p tcp --dport 445 -j todc				# SMB,CIFS,SMB2,DFSN,LSARPC,NbtSS,NetLogonR,SamR,SrvSvc
+-p tcp --dport 464 -j todc				# Kerberos change/set password
+-p tcp --dport 137 -j todc				# NetLogon, NetBIOS Name Resolution
+-p udp --dport 137 -j todc				# NetLogon, NetBIOS Name Resolution
+-p tcp --dport 139 -j todc				# DFSN, NetBIOS Session Service, NetLogon
+-p udp --dport 139 -j todc				# DFSN, NetBIOS Session Service, NetLogon
+-p tcp --dport 25 -j todc				# SMTP
+-p tcp --dport 135 -j todc				# RPC,EPM
+-p tcp --dport 5722 -j todc				# RPC,DFSR(SYSVOL)
+-p udp --dport 67 -j todc				# DHCP, MADCAP
+-p udp --dport 2535 -j todc				# DHCP, MADCAP
+-p tcp --dport 49152:65535 -j todc			# TCP Dynamic

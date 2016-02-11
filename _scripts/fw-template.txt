@@ -1,0 +1,73 @@
+# template - mangle
+*mangle
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+COMMIT
+# template - nat
+*nat
+:PREROUTING ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+<<NAT_DNAT_NAMES>>
+<<NAT_SNAT_NAMES>>
+<<NAT_DNAT_RULES>>
+<<NAT_PREROUTING_RULES>>
+<<NAT_SNAT_RULES>>
+<<NAT_POSTROUTING_RULES>>
+COMMIT
+# template - filter
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+<<FW_NAMES>>
+:ADMINS - [0:0]
+:check_fw_recent - [0:0]
+:check_if - [0:0]
+:check_recent - [0:0]
+:log_accept - [0:0]
+:log_drop - [0:0]
+:log_reject - [0:0]
+<<FW_RULES>>
+-A FORWARD -j check_if 
+-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT 
+<<FW_FORWARD_RULES>>
+-A INPUT -i lo -j ACCEPT 
+# add your stateless rules here (only if you really need that)
+-A INPUT -i lan0 -p udp -m udp --dport 68 -j ACCEPT 
+-A INPUT -i lan0 -p udp -m udp --sport 68 -j ACCEPT 
+-A INPUT -i lan0 -p udp -m udp --dport 67 -j ACCEPT 
+-A INPUT -i lan0 -p udp -m udp --sport 67 -j ACCEPT 
+-A INPUT -j check_if 
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT 
+-A INPUT -m state --state INVALID -m limit --limit 5/sec --limit-burst 10 -j LOG --log-prefix "INVALID " --log-level 7 --log-tcp-options --log-ip-options 
+-A INPUT -m state --state INVALID -j DROP 
+-A INPUT -j check_recent
+# add your custom INPUT rules here
+-A INPUT -p tcp -m tcp --dport 22 -j ADMINS 
+-A INPUT -p tcp -m tcp --dport 137:139 -j DROP 
+-A INPUT -p udp -m udp --dport 137:139 -j DROP 
+-A INPUT -p tcp -m tcp --dport 445 -j DROP 
+# END of custom INPUT rules
+-A INPUT -p icmp -m icmp --icmp-type 8 -m limit --limit 5/sec --limit-burst 8 -j ACCEPT 
+-A INPUT -p icmp -m icmp --icmp-type 8 -j log_drop 
+-A INPUT -p icmp -j ACCEPT 
+-A INPUT -j log_reject 
+-A ADMINS -s 192.168.99.98 -j ACCEPT 
+-A ADMINS -s 192.168.99.99 -j ACCEPT 
+-A ADMINS -j ACCEPT 
+-A check_fw_recent -j RETURN 
+<<FW_CHECKIF_RULES>>
+-A check_recent -j RETURN 
+-A log_accept -m limit --limit 10/sec --limit-burst 20 -j LOG --log-prefix "fw-accept " --log-level 7 --log-tcp-options --log-ip-options 
+-A log_accept -j ACCEPT 
+-A log_drop -m limit --limit 5/sec --limit-burst 10 -j LOG --log-prefix "fw-drop " --log-level 7 --log-tcp-options --log-ip-options 
+-A log_drop -j DROP 
+-A log_reject -m limit --limit 5/sec --limit-burst 10 -j LOG --log-prefix "fw-reject " --log-level 7 --log-tcp-options --log-ip-options 
+-A log_reject -m limit --limit 5/sec -j REJECT --reject-with icmp-port-unreachable 
+-A log_reject -j DROP 
+COMMIT
+# done

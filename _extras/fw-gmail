@@ -1,0 +1,12 @@
+# imap.gmail.com and smtp.gmail.com (random address as of 2015/12/07)
+# 74.125.136.108, 74.125.136.109
+
+-s 10.17.40.34 -d 74.125.136.108 -p tcp --dport 993 -j ACCEPT	# IMAP
+-s 10.17.40.34 -d 74.125.136.109 -p tcp --dport 993 -j ACCEPT	# IMAP
+-s 10.17.40.34 -d 74.125.136.108 -p tcp --dport 587 -j ACCEPT	# SMTP
+-s 10.17.40.34 -d 74.125.136.109 -p tcp --dport 587 -j ACCEPT	# SMTP
+
+-s 10.17.40.34 -d 173.194.65.108 -p tcp --dport 993 -j ACCEPT   # IMAP since 5.2.2016
+-s 10.17.40.34 -d 173.194.65.109 -p tcp --dport 993 -j ACCEPT   # IMAP since 5.2.2016
+-s 10.17.40.34 -d 173.194.65.108 -p tcp --dport 587 -j ACCEPT	# SMTP since 5.2.2016
+-s 10.17.40.34 -d 173.194.65.109 -p tcp --dport 587 -j ACCEPT   # SMTP since 5.2.2016
